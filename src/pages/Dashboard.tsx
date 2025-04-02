@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Search } from "lucide-react";
 import { Nav } from "@/components/app/nav";
 import { Sidebar } from "@/components/app/sidebar";
