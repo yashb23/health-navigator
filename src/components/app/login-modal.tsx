@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
+import { userData } from "@/mockData";
+import { useUserContext } from "@/context/UserContextProvider";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -24,15 +26,25 @@ interface LoginModalProps {
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
+
+  const { setUser } = useUserContext();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Login attempt with:", email, password);
     // For demo purposes, just close the modal
     setTimeout(() => {
-      onClose();
-      navigate("/onboarding");
+      const user = userData.find((data) => data.email === email);
+      if (user) {
+        setUser(() => user);
+        onClose();
+        navigate("/onboarding");
+      } else {
+        setError("User not found");
+      }
     }, 1000);
   };
 
@@ -96,6 +108,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
         </form>
 
         <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-2">
+          {error ? <p className="text-red-400 text-xs">{error}</p> : <></>}
           <div className="w-full text-xs text-slate-500 text-center">
             By signing in, you agree to our{" "}
             <Link to="#" className="text-teal-600 hover:underline">

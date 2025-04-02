@@ -1,8 +1,10 @@
+import { User } from "@/context/UserContextProvider";
 import { Link } from "react-router-dom";
 
 export const Nav = ({
   openLoginModal = () => {},
   postLogin = false,
+  user,
 }: NavProps) => {
   return (
     <header className="sticky top-0 z-10 bg-teal-900 py-4 px-6 md:px-12">
@@ -43,8 +45,8 @@ export const Nav = ({
         )}
 
         <div className="flex items-center gap-4">
-          {postLogin ? (
-            <></>
+          {postLogin && user.id !== 0 ? (
+            <p className="text-white"> Welcome, {user.name}</p>
           ) : (
             <>
               <button
@@ -70,4 +72,5 @@ export const Nav = ({
 interface NavProps {
   openLoginModal?: () => void;
   postLogin?: boolean;
+  user: User;
 }

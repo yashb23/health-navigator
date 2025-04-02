@@ -1,6 +1,7 @@
 import { Footer } from "@/components/app/footer";
 import { LoginModal } from "@/components/app/login-modal";
 import { Nav } from "@/components/app/nav";
+import { useUserContext } from "@/context/UserContextProvider";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -15,10 +16,18 @@ export const Home = () => {
     setIsLoginModalOpen(false);
   };
 
+  const { user } = useUserContext();
+
+  const isLoggedIn = user.id !== 0;
+
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
-        <Nav openLoginModal={openLoginModal} />
+        <Nav
+          openLoginModal={openLoginModal}
+          user={user}
+          postLogin={isLoggedIn}
+        />
         <section className="bg-teal-900 text-white py-16 md:py-24 px-6 md:px-12">
           <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">

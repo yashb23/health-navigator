@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
@@ -8,20 +8,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Nav } from "@/components/app/nav";
+import { useUserContext } from "@/context/UserContextProvider";
 
 export const Onboarding = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    fullName: "Jane A. Smith",
-    medicalRecordNumber: "MRN78901234",
-    dateOfBirth: "1985-06-15",
-  });
+
+  const { user, setUser } = useUserContext();
+
+  const { name, mrn, dob } = user;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setUser((prev) => ({ ...prev, [name]: value }));
   };
+
+  useEffect(() => {
+    if (user.id === 0) {
+      navigate("/"); // if user is not logged in, we send them back to the home page
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,10 +42,8 @@ export const Onboarding = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Nav postLogin={true} />
+      <Nav postLogin={true} user={user} />
       <main className="container mx-auto py-8 px-4 md:py-16">
-        {/* Progress indicator */}
-
         <div className="max-w-xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
           {step === 1 ? (
             <div className="p-6 md:p-8">
@@ -61,7 +65,7 @@ export const Onboarding = () => {
                   <Input
                     id="fullName"
                     name="fullName"
-                    value={formData.fullName}
+                    value={name}
                     onChange={handleChange}
                     placeholder="Enter your full name"
                     required
@@ -79,7 +83,7 @@ export const Onboarding = () => {
                   <Input
                     id="medicalRecordNumber"
                     name="medicalRecordNumber"
-                    value={formData.medicalRecordNumber}
+                    value={mrn}
                     onChange={handleChange}
                     placeholder="e.g. MRN12345678"
                     required
@@ -99,7 +103,7 @@ export const Onboarding = () => {
                     id="dateOfBirth"
                     name="dateOfBirth"
                     type="date"
-                    value={formData.dateOfBirth}
+                    value={dob}
                     onChange={handleChange}
                     required
                     className="w-full"
