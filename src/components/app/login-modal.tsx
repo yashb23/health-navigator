@@ -106,9 +106,8 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
             Sign in with Epic MyChart
           </Button>
         </form>
-
+        <p className="text-red-400 text-center text-sm">{error}</p>
         <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-2">
-          {error ? <p className="text-red-400 text-xs">{error}</p> : <></>}
           <div className="w-full text-xs text-slate-500 text-center">
             By signing in, you agree to our{" "}
             <Link to="#" className="text-teal-600 hover:underline">
